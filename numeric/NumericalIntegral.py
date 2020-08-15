@@ -7,13 +7,6 @@ def function(coefficients, x):
     return f
 
 
-def getAntiDerivative(coefficients):
-    antiDerivative = [0]
-    for i in range(len(coefficients)):
-        antiDerivative.append(coefficients[i] / (i + 1))
-    return antiDerivative
-
-
 def convertStringToIntegerList(coefficientsInString):
     coefficientsInChar = coefficientsInString.split(',')
     coefficients = []
@@ -21,12 +14,17 @@ def convertStringToIntegerList(coefficientsInString):
         coefficients.append(float(coefficient))
     return coefficients
 
-def calculateIntegral(coefficients, initialPoint, finalPoint):
-    antiDerivative = getAntiDerivative(coefficients)
-    finalValue = function(antiDerivative,finalPoint)
-    initialValue = function(antiDerivative, initialPoint)
-    integralResult = finalValue-initialValue
-    return integralResult
+
+def calculateIntegral(coefficients, initialPoint, finalPoint, accuracy):
+    interval = finalPoint-initialPoint
+    dx = interval/accuracy
+    x = initialPoint
+    y = 0
+    for i in range(accuracy):
+        y += function(coefficients, x+(dx/2))
+        x += dx
+    result = y*dx
+    return result
 
 
 print("enter polynomial coefficients:")
@@ -38,5 +36,7 @@ print("enter initial point:")
 initialPoint = float(input())
 print("enter final point:")
 finalPoint = float(input())
-integralResult = calculateIntegral(coefficients, initialPoint, finalPoint)
+print("enter accuracy:")
+accuracy = int(input())
+integralResult = calculateIntegral(coefficients, initialPoint, finalPoint, accuracy)
 print("result: "+str(integralResult))
